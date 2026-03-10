@@ -79,6 +79,13 @@ def generate_timetable(entries, output_path="timetable.xlsx"):
         for idx, height in row_heights.items():
             sheet.row_dimensions[idx].height = height
 
+        # merge only the content and speaker columns for specified rows
+        merge_for = {"報到", "Break", "Lunch"}
+        for row_idx, row in enumerate(df.itertuples(index=False), start=2):
+            if row.Content in merge_for:
+                # keep Time column separate; merge columns B and C instead
+                sheet.merge_cells(start_row=row_idx, start_column=2, end_row=row_idx, end_column=3)
+
     print(f"Timetable written to {output_path}")
 
 
